@@ -1,0 +1,56 @@
+<dx-drop-down-box
+  [showClearButton] = "true"
+  [acceptCustomValue] = "true"
+  [openOnFieldClick] = "false"
+  valueChangeEvent = "input"
+  [hoverStateEnabled] = "true"
+  keyExpr = "Task_ID"
+  valueExpr = "Task_ID"
+  [displayExpr] = "displayExpr"
+  [dataSource] = "tasks"
+  (onOpened) = "onOpened($event)"
+  (onInitialized) = "onInitialized($event)"
+  (onValueChanged) = "onValueChanged($event)"
+  (onKeyDown) = "onKeyDown($event)"
+  (onInput) = "onInput($event)"
+  [(opened)] = "isOpened"
+  [(value)] = "value"
+> 
+  <div *dxTemplate="let data of 'content'">
+    <dx-tree-list
+      [dataSource]="tasks"
+      keyExpr = "Task_ID"
+      parentIdExpr = "Task_Parent_ID"
+      [columnAutoWidth] = "true"
+      [wordWrapEnabled] = "true"
+      [showBorders] = "true"
+      height = "100%"
+      width = "100%"
+      [focusedRowEnabled] = "true"
+      [(focusedRowIndex)] = "focusedRowIndex"
+      (onSelectionChanged) = "onSelectionChanged($event)"
+      (onInitialized) = "treeListInitialized($event)"
+    >
+      <dxo-search-panel [highlightSearchText]="false" [text]="searchPanelText"></dxo-search-panel>
+      <dxo-selection mode="multiple"></dxo-selection>
+      <dxi-column dataField = "Task_ID"></dxi-column>
+      <dxi-column dataField = "Task_Subject"></dxi-column>
+      <dxi-column dataField = "Task_Assigned_Employee_ID" caption = "Assigned">
+        <dxo-lookup [dataSource]="employees" valueExpr="ID" displayExpr="Name"></dxo-lookup>
+      </dxi-column>
+
+      <dxi-column dataField = "Task_Status" caption = "Status">
+        <dxo-lookup [dataSource]="statuses"></dxo-lookup>
+      </dxi-column>
+      <dxi-column dataField = "Task_Priority" caption = "Priority">
+        <dxo-lookup [dataSource]="priorities" valueExpr="id" displayExpr="value"></dxo-lookup>
+      </dxi-column>
+
+      <dxi-column dataField = "Task_Completion" caption = "% Completed" [customizeText] = "customizeText">
+      </dxi-column>
+
+      <dxi-column dataField = "Task_Start_Date" caption = "Start Date" dataType = "date"></dxi-column>
+      <dxi-column dataField = "Task_Due_Date" caption = "Due Date" dataType = "date"></dxi-column>
+    </dx-tree-list>
+  </div>
+</dx-drop-down-box>
