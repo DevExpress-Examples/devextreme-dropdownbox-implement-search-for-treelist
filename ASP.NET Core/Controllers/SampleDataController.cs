@@ -18,4 +18,22 @@ public class SampleDataController: Controller {
         return DataSourceLoader.Load(SampleData.Orders, loadOptions);
     }
 
+    [HttpGet]
+    [Route("GetTasks")]
+    public object GetTasks(DataSourceLoadOptions loadOptions) {
+        return DataSourceLoader.Load(TaskData.Tasks, loadOptions);
+    }
+
+    [HttpGet]
+    [Route("GetEmployees")]
+    public object GetEmployees(DataSourceLoadOptions loadOptions) {
+        return DataSourceLoader.Load(TaskData.Employees, loadOptions);
+    }
+
+    [HttpGet]
+    [Route("GetPriorities")]
+    public object GetPriorities(DataSourceLoadOptions loadOptions) {
+        return DataSourceLoader.Load(TaskData.Priorities, loadOptions);
+    }
+
 }
