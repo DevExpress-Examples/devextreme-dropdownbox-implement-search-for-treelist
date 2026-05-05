@@ -24,6 +24,7 @@ export function displayExpr(item, lookupItems) {
   const employeeData = lookupItems.find(
     (employee) => employee.ID === item.Task_Assigned_Employee_ID,
   );
+  if (!employeeData) return item.Task_Subject || '';
   return `${employeeData.Name}: ${item.Task_Subject} (${item.Task_Status})`;
 }
 
@@ -33,13 +34,14 @@ export function performSearch({
   const dropDownInstance = e.component;
   const text = dropDownInstance.option('text');
   if (isSearchIncomplete(dropDownInstance)) {
-    dropDownInstance?.option('focusAfterLoading', true);
+    dropDownInstance.option('focusAfterLoading', true);
     if (text) {
-      setTimeout(() => {
+      return setTimeout(() => {
         // this function is used to filter lookup column items
         // if you don't have a lookup column, refer to DataGrid example:
         // https://github.com/DevExpress-Examples/devextreme-dropdownbox-filter-data-in-nested-widget
-        const searchExprVal = $('#searchExprOption').dxSelectBox('instance').option('value');
+        const searchExprVal = $('#searchExprOption')
+          .dxSelectBox('instance').option('value');
         applySearchFilter({
           text,
           lookupField: lookupFieldName,
@@ -49,45 +51,55 @@ export function performSearch({
           dataSource,
         });
       }, searchTimeout);
-    } else {
-      dataSource.filter([]);
-      dataSource.load();
     }
+    dataSource.filter([]);
+    dataSource.load();
   }
+  return null;
 }
 
 export function handleDropDownOpened({ e, treeList }) {
   const dropDownBox = e.component;
-  const listFirstLoadCompleted = dropDownBox.option('listFirstLoadCompleted');
+  const listFirstLoadCompleted = dropDownBox
+    .option('listFirstLoadCompleted');
 
-  const handleOptionChanged = (args) => {
-    const list = args.component;
-    const triggerCondition = listFirstLoadCompleted
-      ? args.name === 'opened'
-      : args.name === 'focusedRowKey' || args.name === 'focusedColumnIndex';
+  if (dropDownBox.isKeyDown) {
+    const handleOptionChanged = (args) => {
+      const list = args.component;
+      const triggerCondition = listFirstLoadCompleted
+        ? args.name === 'opened'
+        : args.name === 'focusedRowKey'
+          || args.name === 'focusedColumnIndex';
 
-    if (triggerCondition) {
-      list.off('optionChanged', handleOptionChanged);
+      if (triggerCondition) {
+        list.off('optionChanged', handleOptionChanged);
 
-      if (listFirstLoadCompleted) {
-        requestAnimationFrame(() => {
+        if (listFirstLoadCompleted) {
+          requestAnimationFrame(() => {
+            list.focus();
+            list.option('opened', false);
+          });
+        } else {
           list.focus();
-          list.option('opened', false);
-        });
-      } else {
-        list.focus();
+        }
       }
+    };
+
+    treeList.on('optionChanged', handleOptionChanged);
+
+    if (listFirstLoadCompleted) {
+      treeList.option('opened', true);
     }
-  };
-
-  treeList.on('optionChanged', handleOptionChanged);
-
-  if (listFirstLoadCompleted) {
-    treeList.option('opened', true);
+    dropDownBox.isKeyDown = false;
   }
+
   // the code below resets selection and focused row if a value was cleared
-  const isTextEqualToDisplayValue = dropDownBox.option('text') === dropDownBox.option('displayValue')[0];
-  if ((dropDownBox.option('value') && !dropDownBox.option('text')) || !isTextEqualToDisplayValue) {
+  const isTextEqualToDisplayValue = dropDownBox.option('text')
+    === dropDownBox.option('displayValue')[0];
+  if (
+    (dropDownBox.option('value') && !dropDownBox.option('text'))
+    || !isTextEqualToDisplayValue
+  ) {
     if (treeList.option('selectedRowKeys').length) {
       treeList.option('resetSelection', true);
       treeList.option('selectedRowKeys', []);
@@ -100,13 +112,14 @@ export function handleDropDownOpened({ e, treeList }) {
 }
 
 export function resetSearchState({
-  e, loadedItemsLength, treeList, dataSource,
+  e, hasLoadedItems, treeList, dataSource,
 }) {
+  if (!treeList) return;
   const dropDownBox = e.component;
   const text = dropDownBox.option('text');
   const displayValue = dropDownBox.option('displayValue')[0];
   const resetValue = text && text !== displayValue;
-  if (!loadedItemsLength) {
+  if (!hasLoadedItems) {
     dropDownBox.reset(null);
     dataSource.filter([]);
     dataSource.load();
@@ -119,7 +132,8 @@ export function resetSearchState({
 }
 
 function applySearchFilter({
-  text, lookupField, dataField, searchExprVal, lookupDataSource, dataSource,
+  text, lookupField, dataField,
+  searchExprVal, lookupDataSource, dataSource,
 }) {
   const filter = [lookupField, 'contains', text];
   lookupDataSource.load({ filter }).done((items) => {
@@ -138,7 +152,8 @@ function applySearchFilter({
       });
     }
     // [dataField, '=', -1] was added to return "No Data"
-    const filterExpr = filterParts.length > 0 ? filterParts : [dataField, '=', -1];
+    const filterExpr = filterParts.length > 0
+      ? filterParts : [dataField, '=', -1];
 
     dataSource.filter(filterExpr);
     dataSource.load();

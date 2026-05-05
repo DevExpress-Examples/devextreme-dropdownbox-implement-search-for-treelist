@@ -26,6 +26,7 @@
   "dependencies": {
     "browser-sync": "^3.0.2",
     "devextreme": "^25.2.6",
+    "devextreme-aspnet-data": "^5.0.0",
     "devextreme-dist": "^25.2.6",
     "jquery": "^3.7.1"
   }

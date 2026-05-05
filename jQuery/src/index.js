@@ -21,11 +21,11 @@ lookupDataSource.load().then((items) => {
 $(() => {
   let treeList;
   let searchTimerId;
-  let loadedItemsLength = false;
+  let hasLoadedItems = false;
   let searchTimeout = 1000;
   const storeKey = 'Task_ID';
-  // If the key of the first record is unknown, you can request data from the server
-  // to retrieve it from the first returned item.
+  // If the key of the first record is unknown, you can request
+  // data from the server to retrieve it from the first returned item.
   const defaultValue = 22;
 
   const dataSource = new DevExpress.data.DataSource({
@@ -34,7 +34,7 @@ $(() => {
         ajaxOptions.xhrFields = { withCredentials: true };
       },
       onLoaded(e) {
-        loadedItemsLength = !!e.length;
+        hasLoadedItems = !!e.length;
       },
     }),
   });
@@ -54,7 +54,7 @@ $(() => {
       clearTimeout(searchTimerId);
       const instance = e.component;
       if (!instance.option('opened')) instance.open();
-      performSearch({
+      searchTimerId = performSearch({
         e, lookupDataSource, dataSource, searchTimeout,
       });
     },
@@ -62,7 +62,8 @@ $(() => {
       handleDropDownOpened({ e, treeList });
     },
     onOptionChanged(e) {
-      const listFirstLoadCompleted = dropDownBox.option('listFirstLoadCompleted');
+      const listFirstLoadCompleted = dropDownBox
+        .option('listFirstLoadCompleted');
       if (e.name === 'text' && !e.value && listFirstLoadCompleted) {
         treeList.pageIndex(0).then(() => {
           treeList.option('focusedRowIndex', 0);
@@ -72,14 +73,17 @@ $(() => {
     },
     onValueChanged(args) {
       clearTimeout(searchTimerId);
-      treeList?.option('selectedRowKeys', args.value ? [args.value] : []);
+      treeList?.option(
+        'selectedRowKeys',
+        args.value ? [args.value] : [],
+      );
       if (args.value) {
         args.component.close();
       }
     },
     onKeyDown(e) {
       const instance = e.component;
-      if (e.event.keyCode !== 40) return;
+      if (e.event.key !== 'ArrowDown') return;
       if (!instance.option('opened')) {
         instance.isKeyDown = true;
         instance.open();
@@ -89,7 +93,7 @@ $(() => {
     },
     onClosed(e) {
       resetSearchState({
-        e, loadedItemsLength, treeList, dataSource,
+        e, hasLoadedItems, treeList, dataSource,
       });
     },
     contentTemplate(templateData, container) {
@@ -114,13 +118,14 @@ $(() => {
         scrolling: { mode: 'virtual' },
         selectedRowKeys: [value],
         focusedRowKey: value,
-        onContentReady: (e) => {
-          const listFirstLoadCompleted = dropDownInstance.option('listFirstLoadCompleted');
+        onContentReady: () => {
+          const listFirstLoadCompleted = dropDownInstance
+            .option('listFirstLoadCompleted');
           if (!listFirstLoadCompleted) {
             dropDownInstance.option('listFirstLoadCompleted', true);
           }
         },
-        onFocusedRowChanged(e) {
+        onFocusedRowChanged() {
           if (dropDownBox.option('focusAfterLoading')) {
             dropDownBox.focus();
             dropDownBox.option('focusAfterLoading', false);
@@ -128,7 +133,7 @@ $(() => {
         },
         onKeyDown: (args) => {
           const list = args.component;
-          if (args.event.keyCode === 13) {
+          if (args.event.key === 'Enter') {
             list.selectRows([list.option('focusedRowKey')], false);
           }
         },
@@ -163,7 +168,10 @@ $(() => {
         onSelectionChanged(args) {
           if (!args.component.option('resetSelection')) {
             const keys = args.selectedRowKeys;
-            dropDownInstance.option('value', keys.length ? keys[0] : null);
+            dropDownInstance.option(
+              'value',
+              keys.length ? keys[0] : null,
+            );
           }
           args.component.option('resetSelection', false);
         },
