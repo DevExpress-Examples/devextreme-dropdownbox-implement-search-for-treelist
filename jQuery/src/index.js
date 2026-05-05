@@ -1,5 +1,6 @@
 import {
-  firstRowKey, makeAsyncDataSource, displayExpr, performSearch, handleDropDownOpened, resetSearchState,
+  firstRowKey, makeAsyncDataSource, displayExpr, performSearch,
+  handleDropDownOpened, resetSearchState,
 } from './helpers.js';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
