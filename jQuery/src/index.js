@@ -62,8 +62,7 @@ $(() => {
       handleDropDownOpened({ e, treeList });
     },
     onOptionChanged(e) {
-      const listFirstLoadCompleted = dropDownBox
-        .option('listFirstLoadCompleted');
+      const listFirstLoadCompleted = e.component.option('listFirstLoadCompleted');
       if (e.name === 'text' && !e.value && listFirstLoadCompleted) {
         treeList.pageIndex(0).then(() => {
           treeList.option('focusedRowIndex', 0);
@@ -73,10 +72,6 @@ $(() => {
     },
     onValueChanged(args) {
       clearTimeout(searchTimerId);
-      treeList?.option(
-        'selectedRowKeys',
-        args.value ? [args.value] : [],
-      );
       if (args.value) {
         args.component.close();
       }
@@ -166,14 +161,17 @@ $(() => {
           dataType: 'date',
         }],
         onSelectionChanged(args) {
-          if (!args.component.option('resetSelection')) {
+          const { resetSelection, autoSelection } = args.component.option();
+          if (!resetSelection) {
             const keys = args.selectedRowKeys;
             dropDownInstance.option(
               'value',
               keys.length ? keys[0] : null,
             );
+            if (!autoSelection) dropDownInstance.focus();
           }
           args.component.option('resetSelection', false);
+          args.component.option('autoSelection', false);
         },
       });
       container.append(treeListContainer);

@@ -59,6 +59,7 @@ export function performSearch({
 }
 
 export function handleDropDownOpened({ e, treeList }) {
+  if (!treeList) return;
   const dropDownBox = e.component;
   const listFirstLoadCompleted = dropDownBox
     .option('listFirstLoadCompleted');
@@ -94,20 +95,16 @@ export function handleDropDownOpened({ e, treeList }) {
   }
 
   // the code below resets selection and focused row if a value was cleared
-  const isTextEqualToDisplayValue = dropDownBox.option('text')
-    === dropDownBox.option('displayValue')[0];
-  if (
-    (dropDownBox.option('value') && !dropDownBox.option('text'))
-    || !isTextEqualToDisplayValue
-  ) {
-    if (treeList.option('selectedRowKeys').length) {
-      treeList.option('resetSelection', true);
-      treeList.option('selectedRowKeys', []);
-      treeList.pageIndex(0).then(() => {
-        treeList.option('focusedRowIndex', 0);
-        treeList.option('focusedRowKey', firstRowKey);
-      });
-    }
+  const { text, value } = dropDownBox.option();
+  const isTextEqualToDisplayValue = text === dropDownBox.option('displayValue')[0];
+  const shouldClearSelection = (value && !text) || !isTextEqualToDisplayValue;
+  if (shouldClearSelection && treeList.option('selectedRowKeys').length) {
+    treeList.option('resetSelection', true);
+    treeList.selectRows([]);
+    treeList.pageIndex(0).then(() => {
+      treeList.option('focusedRowIndex', 0);
+      treeList.option('focusedRowKey', firstRowKey);
+    });
   }
 }
 
@@ -116,7 +113,7 @@ export function resetSearchState({
 }) {
   if (!treeList) return;
   const dropDownBox = e.component;
-  const text = dropDownBox.option('text');
+  const { text, value } = dropDownBox.option();
   const displayValue = dropDownBox.option('displayValue')[0];
   const resetValue = text && text !== displayValue;
   if (!hasLoadedItems) {
@@ -124,9 +121,10 @@ export function resetSearchState({
     dataSource.filter([]);
     dataSource.load();
   }
-  if (resetValue) {
+  if (resetValue && !treeList.option('selectedRowKeys').length) {
+    treeList.option('autoSelection', true);
     const firstKey = treeList.getKeyByRowIndex(0);
-    treeList.selectRows(firstKey);
+    treeList.selectRows([firstKey]);
     treeList.option('focusedRowKey', firstKey);
   }
 }

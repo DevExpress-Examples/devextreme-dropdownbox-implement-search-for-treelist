@@ -8,7 +8,7 @@
     "lint-html": "prettier --check src/*",
     "lint-js": "eslint --ext .js .",
     "lint-css": "stylelint src/**/*.css --allow-empty-input",
-    "lint": "npm-run-all -p -c lint-js lint-css lint-html"
+    "lint": "npm-run-all -p -c lint-js lint-css lint-html",
   },
   "devDependencies": {
     "@babel/core": "^7.22.1",
@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "browser-sync": "^3.0.2",
-    "devextreme": "^25.2.6",
     "devextreme-aspnet-data": "^5.0.0",
     "devextreme-dist": "^25.2.6",
     "jquery": "^3.7.1"
