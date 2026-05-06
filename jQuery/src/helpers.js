@@ -29,7 +29,7 @@ export function displayExpr(item, lookupItems) {
 }
 
 export function performSearch({
-  e, lookupDataSource, dataSource, searchTimeout,
+  e, lookupDataSource, dataSource, searchTimeout, searchExprVal
 }) {
   const dropDownInstance = e.component;
   const text = dropDownInstance.option('text');
@@ -40,8 +40,6 @@ export function performSearch({
         // this function is used to filter lookup column items
         // if you don't have a lookup column, refer to DataGrid example:
         // https://github.com/DevExpress-Examples/devextreme-dropdownbox-filter-data-in-nested-widget
-        const searchExprVal = $('#searchExprOption')
-          .dxSelectBox('instance').option('value');
         applySearchFilter({
           text,
           lookupField: lookupFieldName,

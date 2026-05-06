@@ -54,8 +54,9 @@ $(() => {
       clearTimeout(searchTimerId);
       const instance = e.component;
       if (!instance.option('opened')) instance.open();
+      const searchExprVal = $('#searchExprOption').dxSelectBox('instance').option('value');
       searchTimerId = performSearch({
-        e, lookupDataSource, dataSource, searchTimeout,
+        e, lookupDataSource, dataSource, searchTimeout, searchExprVal
       });
     },
     onOpened(e) {
