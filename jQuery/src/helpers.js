@@ -118,7 +118,7 @@ export function resetSearchState({
   const resetValue = text && text !== displayValue;
   if (!hasLoadedItems) {
     dropDownBox.reset(null);
-    dataSource.filter([]);
+    dataSource.filter(null);
     dataSource.load();
   }
   if (resetValue && !treeList.option('selectedRowKeys').length) {
