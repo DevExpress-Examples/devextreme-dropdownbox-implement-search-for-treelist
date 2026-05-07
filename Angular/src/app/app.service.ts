@@ -80,13 +80,7 @@ export class Service {
   ): void {
     const filter = [lookupFieldName, 'contains', text];
     (this.lookupStore.load({ filter }) as Promise<Employee[]>).then((result) => {
-      let items: Employee[] = [];
-      if (Array.isArray(result)) {
-        items = result;
-      } else if ('data' in result) {
-        items = result.data as Employee[];
-      }
-
+      const items: Employee[] = Array.isArray(result) ? result : [];
       const filterParts: unknown[] = [];
       if (Array.isArray(searchExprValue)) {
         filterParts.push([searchExprValue[1], 'contains', text]);
