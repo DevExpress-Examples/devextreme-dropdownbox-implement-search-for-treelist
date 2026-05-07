@@ -38,14 +38,12 @@ export class Service {
 
   createTasksDataSource(
     onBeforeSend: (method: string, ajaxOptions: Record<string, unknown>) => void,
-    onLoaded: (result: Task[]) => void,
   ): DataSource {
     return new DataSource({
       store: AspNetData.createStore({
         key: 'Task_ID',
         loadUrl: `${url}/Tasks`,
         onBeforeSend,
-        onLoaded,
       }),
     });
   }
@@ -79,9 +77,16 @@ export class Service {
     text: string,
     searchExprValue: string | string[],
     dataSource: DataSource,
-  ): Promise<void> {
+  ): void {
     const filter = [lookupFieldName, 'contains', text];
-    return (this.lookupStore.load({ filter }) as Promise<Employee[]>).then((items) => {
+    (this.lookupStore.load({ filter }) as Promise<Employee[]>).then((result) => {
+      let items: Employee[] = [];
+      if (Array.isArray(result)) {
+        items = result;
+      } else if ('data' in result) {
+        items = result.data as Employee[];
+      }
+
       const filterParts: unknown[] = [];
       if (Array.isArray(searchExprValue)) {
         filterParts.push([searchExprValue[1], 'contains', text]);
@@ -98,7 +103,7 @@ export class Service {
         ? filterParts
         : [gridLookupFieldName, '=', -1];
       dataSource.filter(filterExpr);
-      return dataSource.load() as Promise<void>;
-    });
+      dataSource.load().then(() => {}).catch(() => {});
+    }).catch(() => {});
   }
 }

@@ -1,78 +1,14 @@
-<div class="demo-container">
+<div class="dx-viewport demo-container">
   <div class="row">
     <p>DropDownBox with search and embedded TreeList</p>
-    <dx-drop-down-box
-      #dropDownBoxRef
-      [showClearButton]="true"
-      [width]="'40vw'"
-      [value]="value"
-      (valueChange)="value = $event"
-      [acceptCustomValue]="true"
-      [openOnFieldClick]="false"
-      valueChangeEvent=""
-      [valueExpr]="'Task_ID'"
+    <app-drop-down-list
+      [selectedRowKey]="22"
       [dataSource]="dataSource"
-      [displayExpr]="displayExprFn"
-      (onInput)="onInput($event)"
-      (onOpened)="onOpened($event)"
-      (onOptionChanged)="onOptionChanged($event)"
-      (onValueChanged)="onValueChanged($event)"
-      (onKeyDown)="onKeyDown($event)"
-      (onClosed)="onClosed($event)"
-    >
-      <div *dxTemplate="let data of 'content'">
-        <dx-tree-list
-          #treeListRef
-          [dataSource]="dataSource"
-          [hasItemsExpr]="'Has_Items'"
-          [parentIdExpr]="'Task_Parent_ID'"
-          [columnAutoWidth]="true"
-          [wordWrapEnabled]="true"
-          [showBorders]="true"
-          [height]="400"
-          [width]="'100%'"
-          [focusedRowEnabled]="true"
-          [focusedRowKey]="defaultValue"
-          (onContentReady)="treeListOnContentReady()"
-          (onFocusedRowChanged)="treeListOnFocusedRowChanged()"
-          (onKeyDown)="treeListOnKeyDown($event)"
-          (onSelectionChanged)="onSelectionChanged($event)"
-        >
-          <dxo-remote-operations
-            [filtering]="true"
-            [sorting]="true"
-            [grouping]="true"
-          ></dxo-remote-operations>
-          <dxo-selection mode="single"></dxo-selection>
-          <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-          <dxi-column dataField="Task_ID"></dxi-column>
-          <dxi-column
-            dataField="Task_Assigned_Employee_ID"
-            caption="Employee"
-            [minWidth]="120"
-          >
-            <dxo-lookup
-              [dataSource]="service.lookupStore"
-              valueExpr="ID"
-              displayExpr="Name"
-            ></dxo-lookup>
-          </dxi-column>
-          <dxi-column dataField="Task_Subject" [width]="300"></dxi-column>
-          <dxi-column
-            dataField="Task_Start_Date"
-            caption="Start Date"
-            dataType="date"
-          ></dxi-column>
-          <dxi-column dataField="Task_Status" caption="Status"></dxi-column>
-          <dxi-column
-            dataField="Task_Due_Date"
-            caption="Due Date"
-            dataType="date"
-          ></dxi-column>
-        </dx-tree-list>
-      </div>
-    </dx-drop-down-box>
+      [dropDownBoxDataSource]="dropDownBoxDataSource"
+      [searchTimeout]="searchTimeout"
+      [displayExpr]="displayExpr"
+      [searchExprValue]="searchExprValue"
+    ></app-drop-down-list>
   </div>
 
   <div class="options">
@@ -84,7 +20,6 @@
         displayExpr="name"
         valueExpr="value"
         [(value)]="searchExprValue"
-        (onValueChanged)="onSearchExprChanged($event)"
       ></dx-select-box>
     </div>
     <div class="option">
