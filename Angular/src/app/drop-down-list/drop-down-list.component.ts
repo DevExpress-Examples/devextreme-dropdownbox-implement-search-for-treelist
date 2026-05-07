@@ -56,9 +56,15 @@ export class DropDownListComponent implements OnInit, OnChanges {
     this.value = this.selectedRowKey;
     this.selectedRowKeys = [this.selectedRowKey];
     this.focusedRowKey = this.selectedRowKey;
-    this.dataSource.on('changed', () => {
-      this.hasLoadedItems = !!this.dataSource.items().length;
-    });
+    this.dataSource.on('changed', this.changedHandler);
+  }
+
+  private readonly changedHandler = (): void => {
+    this.hasLoadedItems = !!this.dataSource.items().length;
+  };
+
+  ngOnDestroy(): void {
+    this.dataSource.off('changed', this.changedHandler);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
