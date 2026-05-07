@@ -29,7 +29,7 @@ export function displayExpr(item, lookupItems) {
 }
 
 export function performSearch({
-  e, lookupDataSource, dataSource, searchTimeout, searchExprVal
+  e, lookupDataSource, dataSource, searchTimeout, searchExprVal,
 }) {
   const dropDownInstance = e.component;
   const text = dropDownInstance.option('text');
