@@ -18,7 +18,7 @@ export class DropDownListComponent implements OnInit, OnChanges {
 
   @Input() dataSource!: DataSource;
 
-  @Input() dropDownBoxDataSource: any;
+  @Input() dropDownBoxDataSource!: DataSource;
 
   @Input() searchTimeout = 1000;
 

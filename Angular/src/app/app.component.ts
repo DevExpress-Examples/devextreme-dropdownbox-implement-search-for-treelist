@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DataSource } from 'devextreme-angular/common/data';
-import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service, Employee, SearchExprItem } from './app.service';
 
 @Component({
