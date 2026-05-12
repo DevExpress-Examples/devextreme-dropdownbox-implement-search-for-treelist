@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 import type DxDropDownBox from 'devextreme/ui/drop_down_box';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 

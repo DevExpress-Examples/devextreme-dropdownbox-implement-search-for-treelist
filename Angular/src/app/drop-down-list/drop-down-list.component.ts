@@ -86,7 +86,7 @@ export class DropDownListComponent implements OnInit, OnChanges {
     if (!this.dropDownBoxOpened) this.dropDownBoxOpened = true;
 
     if (this.service.isSearchIncomplete(instance)) {
-      const text = instance.option('text') as string;
+      const text = instance.option('text');
       if (text) {
         this.searchTimerId = setTimeout(() => {
           this.service.applySearchFilter(text, this.searchExprValue, this.dataSource);
@@ -142,8 +142,7 @@ export class DropDownListComponent implements OnInit, OnChanges {
   onOptionChanged(e: DxDropDownBoxTypes.OptionChangedEvent): void {
     if (e.name === 'text' && !e.value && this.listFirstLoadCompleted) {
       const treeListInstance = this.treeListRef?.instance;
-      if (!treeListInstance) return;
-      treeListInstance.pageIndex(0).then(() => {
+      treeListInstance?.pageIndex(0).then(() => {
         this.focusedRowIndex = 0;
         this.focusedRowKey = firstRowKey;
       }).catch(() => {});
