@@ -113,13 +113,13 @@ export class DropDownListComponent implements OnInit, OnChanges {
         setTimeout(() => {
           list.focus();
           list.option('opened', false);
-        }, 1000);
+        }, 100);
       }
     };
 
     treeListInstance.on('optionChanged', handleOptionChanged);
 
-    if (this.listFirstLoadCompleted) {
+    if (this.listFirstLoadCompleted && !this.service.isSearchIncomplete(dropDownBox)) {
       treeListInstance.option('opened', true);
     }
 
