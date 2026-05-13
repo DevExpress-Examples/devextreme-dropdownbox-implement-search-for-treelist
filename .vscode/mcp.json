@@ -1,0 +1,13 @@
+{
+	"servers": {
+    "dxdocs": {
+      "url": "https://api.devexpress.com/mcp/docs",
+      "type": "http"
+    },
+    "dxdocs24_2": {
+      "url": "https://api.devexpress.com/mcp/docs?v=24.2",
+      "type": "http"
+    }
+  },
+	"inputs": []
+}

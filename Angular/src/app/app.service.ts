@@ -36,14 +36,12 @@ export class Service {
     loadUrl: `${url}/TaskEmployees`,
   });
 
-  createTasksDataSource(
-    onBeforeSend: (method: string, ajaxOptions: Record<string, unknown>) => void,
-  ): DataSource {
+  createTasksDataSource(): DataSource {
     return new DataSource({
       store: AspNetData.createStore({
         key: 'Task_ID',
         loadUrl: `${url}/Tasks`,
-        onBeforeSend,
+        onBeforeSend: (method, ajaxOptions) => ajaxOptions.xhrFields = { withCredentials: true },
       }),
     });
   }

@@ -26,11 +26,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.searchExprItems = this.service.getSearchExprItems();
 
-    this.dataSource = this.service.createTasksDataSource(
-      (_method, ajaxOptions) => {
-        ajaxOptions['xhrFields'] = { withCredentials: true };
-      },
-    );
+    this.dataSource = this.service.createTasksDataSource();
     this.dropDownBoxDataSource = this.dataSource;
 
     (this.service.lookupStore.load() as Promise<Employee[]>).then((items) => {
