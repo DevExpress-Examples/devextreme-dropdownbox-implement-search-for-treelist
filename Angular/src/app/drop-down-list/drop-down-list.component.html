@@ -1,0 +1,80 @@
+<dx-drop-down-box
+  #dropDownBoxRef
+  placeholder="Select a value..."
+  [showClearButton]="true"
+  width="40vw"
+  [value]="value"
+  [acceptCustomValue]="true"
+  [openOnFieldClick]="false"
+  valueChangeEvent=""
+  valueExpr="Task_ID"
+  [dataSource]="dropDownBoxDataSource"
+  [displayExpr]="displayExpr"
+  [(opened)]="dropDownBoxOpened"
+  (onInput)="onInput($event)"
+  (onOpened)="onOpened($event)"
+  (onOptionChanged)="onOptionChanged($event)"
+  (onValueChanged)="onValueChanged($event)"
+  (onKeyDown)="onKeyDown($event)"
+  (onClosed)="onClosed($event)"
+>
+  <div *dxTemplate="let data of 'content'">
+    <dx-tree-list
+      #treeListRef
+      [dataSource]="dataSource"
+      hasItemsExpr="Has_Items"
+      parentIdExpr="Task_Parent_ID"
+      [columnAutoWidth]="true"
+      [wordWrapEnabled]="true"
+      [showBorders]="true"
+      [height]="400"
+      [width]="'100%'"
+      [focusedRowEnabled]="true"
+      [(focusedRowKey)]="focusedRowKey"
+      [focusedRowIndex]="focusedRowIndex"
+      [(selectedRowKeys)]="selectedRowKeys"
+      (onContentReady)="treeListOnContentReady($event)"
+      (onKeyDown)="treeListOnKeyDown($event)"
+      (onSelectionChanged)="onSelectionChanged($event)"
+    >
+      <dxo-tree-list-remote-operations
+        [filtering]="true"
+        [sorting]="true"
+        [grouping]="true"
+      ></dxo-tree-list-remote-operations>
+      <dxo-tree-list-selection mode="single"></dxo-tree-list-selection>
+      <dxo-tree-list-scrolling mode="virtual"></dxo-tree-list-scrolling>
+
+      <dxi-tree-list-column dataField="Task_ID"></dxi-tree-list-column>
+      <dxi-tree-list-column
+        dataField="Task_Assigned_Employee_ID"
+        caption="Employee"
+        [minWidth]="120"
+      >
+        <dxo-tree-list-lookup
+          [dataSource]="service.lookupStore"
+          valueExpr="ID"
+          displayExpr="Name"
+        ></dxo-tree-list-lookup>
+      </dxi-tree-list-column>
+      <dxi-tree-list-column
+        dataField="Task_Subject"
+        [width]="300"
+      ></dxi-tree-list-column>
+      <dxi-tree-list-column
+        dataField="Task_Start_Date"
+        caption="Start Date"
+        dataType="date"
+      ></dxi-tree-list-column>
+      <dxi-tree-list-column
+        dataField="Task_Status"
+        caption="Status"
+      ></dxi-tree-list-column>
+      <dxi-tree-list-column
+        dataField="Task_Due_Date"
+        caption="Due Date"
+        dataType="date"
+      ></dxi-tree-list-column>
+    </dx-tree-list>
+  </div>
+</dx-drop-down-box>

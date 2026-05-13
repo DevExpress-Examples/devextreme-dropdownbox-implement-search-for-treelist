@@ -1,128 +1,40 @@
-import { Component, ViewChild } from '@angular/core';
-import { DxTreeListComponent, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { DxDropDownBoxComponent, DxDropDownBoxTypes } from 'devextreme-angular/ui/drop-down-box';
-import {
-  Service, Task, Employee, Priority,
-} from './app.service';
+import { Component, OnInit } from '@angular/core';
+import { DataSource } from 'devextreme-angular/common/data';
+import { Service, Employee, SearchExprItem } from './app.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: false,
 })
-export class AppComponent {
-  @ViewChild('treeList', { static: false }) treeList!: DxTreeListComponent;
+export class AppComponent implements OnInit {
+  dataSource!: DataSource;
 
-  @ViewChild('dropDownBox', { static: false }) dropDownBox!: DxDropDownBoxComponent;
+  dropDownBoxDataSource!: DataSource;
 
-  title = 'DropDownBox';
+  displayExpr: ((item: any) => string) | undefined;
 
-  focusedRowIndex = -1;
+  searchExprItems!: SearchExprItem[];
 
-  tasks: Task[];
+  searchExprValue: string | string[] = 'Employee';
 
-  employees: Employee[];
+  searchTimeout = 1000;
 
-  priorities: Priority[];
+  constructor(readonly service: Service) {}
 
-  statuses: string[];
+  ngOnInit(): void {
+    this.searchExprItems = this.service.getSearchExprItems();
 
-  searchPanelText = '';
+    this.dataSource = this.service.createTasksDataSource();
+    this.dropDownBoxDataSource = this.dataSource;
 
-  value: number[] | null = null;
-
-  isOpened = false;
-
-  constructor(private readonly service: Service) {
-    this.tasks = this.service.getTasks();
-    this.employees = this.service.getEmployees();
-    this.priorities = this.service.getPriorities();
-
-    this.statuses = this.service.getStatuses();
-  }
-
-  onInitialized(e: DxDropDownBoxTypes.InitializedEvent): void {
-  }
-
-  treeListInitialized(e: DxTreeListTypes.InitializedEvent): void {
-  }
-
-  displayExpr(item: Task | string): string {
-    return typeof item === 'object' ? item.Task_Subject : String(item);
-  }
-
-  customizeText(cellInfo: { valueText: string }): string {
-    return `${cellInfo.valueText}%`;
-  }
-
-  onInput(e: DxDropDownBoxTypes.InputEvent): void {
-    if (!this.isOpened) {
-      this.isOpened = true;
-    }
-
-    const instance = this.treeList?.instance;
-    if (!instance) return;
-
-    if (typeof this.value === 'string') {
-      const text = e.component.option('text') as string;
-      this.searchPanelText = text || '';
-    }
-  }
-
-  onOpened(e: DxDropDownBoxTypes.OpenedEvent): void {
-    // eslint-disable-next-line no-void
-    void setTimeout(() => {
-      e.component.focus();
+    (this.service.lookupStore.load() as Promise<Employee[]>).then((items) => {
+      this.displayExpr = (item: any): string => this.service.getDisplayExpr(item, items);
+      return items;
+    }).catch((error) => {
+      // eslint-disable-next-line no-console
+      console.error('Failed to load lookup data:', error);
     });
-  }
-
-  onValueChanged(e: DxDropDownBoxTypes.ValueChangedEvent): void {
-    const instance = this.treeList?.instance;
-    if (!instance) return;
-
-    if (!this.value) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      instance.deselectAll();
-      return;
-    }
-
-    if (Array.isArray(e.previousValue) && e.previousValue.length > 0 && typeof this.value === 'string') {
-      this.value = e.previousValue;
-      const lastValue = e.previousValue.pop();
-      if (lastValue !== undefined) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        instance.deselectRows([lastValue]);
-      }
-    }
-  }
-
-  onKeyDown(e: DxDropDownBoxTypes.KeyDownEvent): void {
-    if (e.event?.keyCode !== 40) return;
-
-    const ddbInstance = this.dropDownBox?.instance;
-    if (!ddbInstance) return;
-
-    if (!ddbInstance.option('opened')) {
-      // eslint-disable-next-line no-void
-      void ddbInstance.open();
-    } else {
-      const treeInstance = this.treeList?.instance;
-      if (!treeInstance) return;
-
-      const visibleRows = treeInstance.getVisibleRows().length - 1;
-      if (this.focusedRowIndex === -1 || visibleRows < this.focusedRowIndex) {
-        this.focusedRowIndex = 0;
-      }
-      const rowElement = treeInstance.getRowElement(this.focusedRowIndex);
-      if (rowElement && rowElement.length > 0) {
-        treeInstance.focus(rowElement[0]);
-      }
-    }
-  }
-
-  onSelectionChanged(e: DxTreeListTypes.SelectionChangedEvent): void {
-    const keys = e.selectedRowKeys;
-    const hasSelection = keys.length;
-    this.value = hasSelection ? keys : null;
   }
 }
