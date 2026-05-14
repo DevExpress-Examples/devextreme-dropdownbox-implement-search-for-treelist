@@ -33,7 +33,7 @@ body {
 }
 
 .row > * {
-  width: auto;
+    width: auto;
 }
 
 .row p {
