@@ -1,116 +1,108 @@
 @using ASP_NET_Core.Models
-
-@(Html.DevExtreme().DropDownBox()
-    .DataSource(d => d.Mvc()
-        .Controller("SampleData")
-        .LoadAction("GetTasks")
-        .LoadMode(DataSourceLoadMode.Raw)
-        .Key("Task_ID")
-    )
-    .ID("dropDownBox")
-    .ShowClearButton(true)
-    .AcceptCustomValue(true)
-    .OpenOnFieldClick(false)
-    .ValueChangeEvent("input")
-    .HoverStateEnabled(true)
-    .ValueExpr("Task_ID")
-    .DisplayExpr("Task_Subject")
-    .OnInput("dropDownBoxOnInput")
-    .OnOpened("onOpened")
-    .OnKeyDown("onKeyDown")
-    .OnValueChanged("dropDownBoxValueChanged")
-    .ContentTemplate(@<text>
-        @(Html.DevExtreme().TreeList()
-        .DataSource(d => d.Mvc()
-            .Controller("SampleData")
-            .LoadAction("GetTasks")
-            .Key("Task_ID")
+    <div class="row">
+        <p>DropDownBox with search and embedded TreeList</p>
+        <div>
+        @(Html.DevExtreme().DropDownBox()
+            .ID("treeBox")
+            .ShowClearButton(true)
+            .Width("40vw")
+            .Value(22)
+            .AcceptCustomValue(true)
+            .OpenOnFieldClick(false)
+            .ValueChangeEvent("")
+            .Height("100%")
+            .ValueExpr("Task_ID")
+            .DisplayExpr(new JS("displayExpr"))
+            .DataSource(d => d.Mvc()
+                .Controller("SampleData")
+                .LoadAction("GetTasks")
+                .Key("Task_ID")
+            )
+            .OnInput("dropDownBoxOnInput")
+            .OnOpened("dropDownBoxOnOpened")
+            .OnOptionChanged("dropDownBoxOnOptionChanged")
+            .OnValueChanged("dropDownBoxOnValueChanged")
+            .OnKeyDown("dropDownBoxOnKeyDown")
+            .OnClosed("dropDownBoxOnClosed")
+            .ContentTemplate(@<text>
+                @(Html.DevExtreme().TreeList()
+                    .DataSource(d => d.Mvc()
+                        .Controller("SampleData")
+                        .LoadAction("GetTasks")
+                        .Key("Task_ID")
+                    )
+                    .DataSourceOptions(o => o.PostProcess("postProcess"))
+                    .ParentIdExpr("Task_Parent_ID")
+                    .HasItemsExpr("Has_Items")
+                    .RemoteOperations(r => r.Filtering(true).Sorting(true).Grouping(true))
+                    .ColumnAutoWidth(true)
+                    .WordWrapEnabled(true)
+                    .ShowBorders(true)
+                    .Height(400)
+                    .Width("100%")
+                    .FocusedRowEnabled(true)
+                    .FocusedRowKey(new JS("component.option('value')"))
+                    .Selection(s => s.Mode(SelectionMode.Single))
+                    .SelectedRowKeys(new JS("[component.option('value')]"))
+                    .Scrolling(s => s.Mode(TreeListScrollingMode.Virtual))
+                    .OnContentReady("treeListOnContentReady")
+                    .OnFocusedRowChanged("treeListOnFocusedRowChanged")
+                    .OnKeyDown("treeListOnKeyDown")
+                    .OnSelectionChanged("treeListOnSelectionChanged")
+                    .OnInitialized("treeListOnInitialized")
+                    .Columns(c => {
+                        c.Add().DataField("Task_ID");
+                        c.Add().DataField("Task_Assigned_Employee_ID")
+                            .Caption("Employee")
+                            .MinWidth(120)
+                            .Lookup(l => l
+                                .DataSource(ds => ds.Mvc()
+                                    .Controller("SampleData")
+                                    .LoadAction("GetEmployees")
+                                )
+                                .ValueExpr("ID")
+                                .DisplayExpr("Name")
+                            );
+                        c.Add().DataField("Task_Subject").Width(300);
+                        c.Add().DataField("Task_Start_Date").Caption("Start Date").DataType(GridColumnDataType.Date);
+                        c.Add().DataField("Task_Status").Caption("Status");
+                        c.Add().DataField("Task_Due_Date").Caption("Due Date").DataType(GridColumnDataType.Date);
+                    })
+                )
+            </text>)
         )
-        .Height(500)
-        .WordWrapEnabled(true)
-        .ShowBorders(true)
-        .SearchPanel(sp=>sp.HighlightSearchText(false))
-        .Selection(sl=>sl.Mode(SelectionMode.Multiple))
-        .ParentIdExpr("Task_Parent_ID")
-        .FocusedRowEnabled(true)
-        .OnSelectionChanged("treeListSelectionChanged")
-        .OnInitialized("treeListInitialized")
-        .Columns(c =>
-        {
-            c.Add().DataField("Task_ID");
-            c.Add().DataField("Task_Subject");
+        </div>
+    </div>
 
-            c.Add().DataField("Task_Assigned_Employee_ID").Caption("Assigned")
-                .Lookup(l=>l.DataSource(d=>d.Mvc().Controller("SampleData").LoadAction("GetEmployees"))
+    <div class="options">
+        <div class="caption">Search Options</div>
+        <div class="option">
+            <div>Search Expression</div>
+            @(Html.DevExtreme().SelectBox()
+                .ID("searchExprOption")
+                .DataSource(new[] {
+                    new { Name = "'Employee'", Value = "Employee" },
+                    new { Name = "['Employee','Task_ID']", Value = "Employee,Task_ID" },
+                    new { Name = "['Employee','Task_Subject']", Value = "Employee,Task_Subject" }
+                })
                 .DisplayExpr("Name")
-                .ValueExpr("ID")
-            );
-            c.Add().DataField("Task_Status").Caption("Status").Lookup(l=>l.DataSource(new[] { "Not Started", "Need Assistance", "In Progress", "Deferred", "Completed"}));
-            c.Add().DataField("Task_Priority").Caption("Priority").Lookup(l => l.DataSource(d => d.Mvc().Controller("SampleData").LoadAction("GetPriorities")).ValueExpr("id").DisplayExpr("value"));
-            c.Add().DataField("Task_Completion").Caption("% Completed").CustomizeText("customizeText");
-            c.Add().DataField("Task_Start_Date").Caption("Start Date").DataType(GridColumnDataType.Date);
-            c.Add().DataField("Task_Due_Date").Caption("Due Date").DataType(GridColumnDataType.Date);
-        })
-        )
-    </text>)
-)
+                .ValueExpr("Value")
+                .Value("Employee")
+                .OnValueChanged("onSearchExprChanged")
+            )
+        </div>
+        <div class="option">
+            <div>Search Timeout</div>
+            @(Html.DevExtreme().NumberBox()
+                .ID("searchTimeoutOption")
+                .Min(0)
+                .Max(10000)
+                .Value(1000)
+                .ShowSpinButtons(true)
+                .Step(100)
+                .OnValueChanged("onSearchTimeoutChanged")
+            )
+        </div>
+    </div>
 
-<script>
-    let treeList;
-
-    function customizeText(cellInfo) {
-        return cellInfo.valueText + "%";
-    }
-    function dropDownBoxValueChanged(e) {
-        if (!e.value) {
-            treeList.deselectAll()
-            return;
-        }
-        if (Array.isArray(e.previousValue) && e.previousValue.length > 0 && typeof e.value === "string") {
-            treeList.deselectRows(e.previousValue.pop());
-            e.component.option("value", e.previousValue)
-        }
-    }
-
-    function dropDownBoxOnInput(e) {
-        const ddbInstance = e.component;
-        if (!ddbInstance.option("opened")) ddbInstance.open();
-        const text = ddbInstance.option("text");
-        const value = ddbInstance.option("value");
-        if (typeof value === "string") {
-            treeList.option("searchPanel.text", text)
-        }
-    }
-
-    function onOpened(e) {
-        setTimeout(() => {
-            e.component.focus();
-        });
-    }
-
-    function onKeyDown(e) {
-        const ddbInstance = e.component;
-        if (e.event.keyCode !== 40) return;
-        if (!ddbInstance.option("opened")) {
-            ddbInstance.open();
-        } else {
-            let focusedIndex = treeList.option("focusedRowIndex");
-            const visibleRows = treeList.getVisibleRows().length - 1;
-            if (focusedIndex === -1 || visibleRows < focusedIndex) {
-                focusedIndex = 0;
-            }
-            treeList.focus(treeList.getRowElement(focusedIndex));
-        }
-    }
-
-    function treeListSelectionChanged(e) {
-        const keys = e.selectedRowKeys;
-        const hasSelection = keys.length;
-
-        $("#dropDownBox").dxDropDownBox("instance").option("value", hasSelection ? keys : null);
-    }
-
-    function treeListInitialized(e) {
-        treeList = e.component;
-    }
-</script>
+<script src="~/js/drop-down-box.js"></script>
