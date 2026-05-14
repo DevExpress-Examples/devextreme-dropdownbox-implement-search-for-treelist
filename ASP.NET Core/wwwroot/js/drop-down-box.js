@@ -85,7 +85,7 @@ function performSearch(e, ds) {
                 applySearchFilter(text, ds);
             }, searchTimeout);
         }
-        ds.filter([]);
+        ds.filter(null);
         ds.load();
     }
     return null;
