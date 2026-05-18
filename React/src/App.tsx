@@ -9,6 +9,7 @@ import { type DataSource } from 'devextreme-react/common/data';
 import DropDownList from './components/DropDownList/DropDownList.tsx';
 import {
   type Employee, type SearchExprItem,
+  type Task,
   createTasksDataSource,
   getDisplayExpr,
   getSearchExprItems,
@@ -18,7 +19,7 @@ import {
 const searchExprItems: SearchExprItem[] = getSearchExprItems();
 
 function App(): JSX.Element {
-  const [displayExpr, setDisplayExpr] = useState<((item: unknown) => string) | undefined>(undefined);
+  const [displayExpr, setDisplayExpr] = useState<((item: Task) => string) | undefined>(undefined);
   const [searchExprValue, setSearchExprValue] = useState<string | string[]>('Employee');
   const [searchTimeout, setSearchTimeout] = useState(1000);
 
@@ -26,7 +27,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     (lookupStore.load() as Promise<Employee[]>).then((items) => {
-      setDisplayExpr(() => (item: unknown) => getDisplayExpr(item as Parameters<typeof getDisplayExpr>[0], items));
+      setDisplayExpr(() => (item: Task) => getDisplayExpr(item, items));
       return items;
     }).catch((error) => {
       // eslint-disable-next-line no-console

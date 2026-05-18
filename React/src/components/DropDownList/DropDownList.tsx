@@ -11,23 +11,23 @@ import {
 } from '../../service';
 import { selectionReducer } from './selectionReducer';
 
-interface DropDownListProps {
+interface DropDownListProps<T> {
   selectedRowKey: number;
   dataSource: DataSource;
   dropDownBoxDataSource: DataSource;
   searchTimeout?: number;
-  displayExpr?: ((item: unknown) => string) | undefined;
+  displayExpr?: ((item: T) => string) | undefined;
   searchExprValue: string | string[];
 }
 
-export default function DropDownList({
+export default function DropDownList<T>({
   selectedRowKey,
   dataSource,
   dropDownBoxDataSource,
   searchTimeout = 1000,
   displayExpr,
   searchExprValue,
-}: DropDownListProps): JSX.Element {
+}: DropDownListProps<T>): JSX.Element {
   const [selection, dispatch] = useReducer(selectionReducer, {
     dropDownValue: selectedRowKey,
     selectedRowKeys: [selectedRowKey],
