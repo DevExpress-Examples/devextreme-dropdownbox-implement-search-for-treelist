@@ -35,7 +35,6 @@ export default function DropDownList({
   });
 
   const [dropDownBoxOpened, setDropDownBoxOpened] = useState(false);
-  const [treeListDS, setTreeListDS] = useState<DataSource | null>(null);
 
   const treeListRef = useRef<TreeListRef>(null);
   const dropDownBoxRef = useRef<DropDownBoxRef>(null);
@@ -45,18 +44,24 @@ export default function DropDownList({
   const listFirstLoadCompletedRef = useRef(false);
 
   useEffect(() => {
-    function changedHandler(): void {
+  function changedHandler(): void {
+    requestAnimationFrame(() => {
       hasLoadedItemsRef.current = !!dataSource.items().length;
       if (hasLoadedItemsRef.current && !selection.focusedRowKey) {
         const items = dataSource.items();
         dispatch({ type: 'SET_FOCUSED_KEY', key: items[0].key });
       }
-    }
-    dataSource.on('changed', changedHandler);
-    return () => {
-      dataSource.off('changed', changedHandler);
-    };
-  }, [dataSource]);
+    });
+  }
+
+  dataSource.on('changed', changedHandler);
+
+  changedHandler();
+
+  return () => {
+    dataSource.off('changed', changedHandler);
+  };
+}, [dataSource, selection.focusedRowKey]);
 
   const focusInput = useCallback((): void => {
     setTimeout(() => {
@@ -85,7 +90,6 @@ export default function DropDownList({
 
   const onOpened = useCallback((e: DropDownBoxTypes.OpenedEvent): void => {
     const treeListInstance = treeListRef.current?.instance();
-    if (!treeListDS) setTreeListDS(dataSource);
     const dropDownBox = e.component;
 
     function handleOptionChanged(args: TreeListTypes.OptionChangedEvent): void {
@@ -121,7 +125,7 @@ export default function DropDownList({
         focusInput();
       }).catch(() => {});
     }
-  }, [treeListDS, focusInput, listFirstLoadCompletedRef, treeListRef]);
+  }, [focusInput, listFirstLoadCompletedRef, treeListRef]);
 
   const onOptionChanged = useCallback((e: DropDownBoxTypes.OptionChangedEvent): void => {
     if (e.name === 'text' && !e.value && listFirstLoadCompletedRef.current) {
@@ -196,6 +200,46 @@ export default function DropDownList({
     focusInput();
   }, []);
 
+  const treeListRender = useCallback(() => (
+    <TreeList
+      ref={treeListRef}
+      dataSource={dataSource}
+      hasItemsExpr="Has_Items"
+      parentIdExpr="Task_Parent_ID"
+      columnAutoWidth
+      wordWrapEnabled
+      showBorders
+      height={400}
+      width="100%"
+      focusedRowEnabled
+      focusedRowKey={selection.focusedRowKey}
+      selectedRowKeys={selection.selectedRowKeys}
+      onContentReady={treeListOnContentReady}
+      onKeyDown={treeListOnKeyDown}
+      onFocusedRowChanged={onFocusedRowChanged}
+      onSelectionChanged={onSelectionChanged}
+    >
+      <RemoteOperations filtering sorting grouping />
+      <Selection mode="single" />
+      <Scrolling mode="virtual" />
+      <Column dataField="Task_ID" />
+      <Column dataField="Task_Assigned_Employee_ID" caption="Employee" minWidth={120}>
+        <Lookup dataSource={lookupStore} valueExpr="ID" displayExpr="Name" />
+      </Column>
+      <Column dataField="Task_Subject" width={300} />
+      <Column dataField="Task_Start_Date" caption="Start Date" dataType="date" />
+      <Column dataField="Task_Status" caption="Status" />
+      <Column dataField="Task_Due_Date" caption="Due Date" dataType="date" />
+    </TreeList>
+  ), [
+    selection.focusedRowKey,
+    selection.selectedRowKeys,
+    treeListOnContentReady,
+    treeListOnKeyDown,
+    onFocusedRowChanged,
+    onSelectionChanged,
+  ]);
+
   return (
     <DropDownBox
       ref={dropDownBoxRef}
@@ -217,37 +261,7 @@ export default function DropDownList({
       onKeyDown={onKeyDown}
       onClosed={onClosed}
       onOpenedChange={setDropDownBoxOpened}
-    >
-      <TreeList
-        ref={treeListRef}
-        dataSource={treeListDS}
-        hasItemsExpr="Has_Items"
-        parentIdExpr="Task_Parent_ID"
-        columnAutoWidth
-        wordWrapEnabled
-        showBorders
-        height={400}
-        width="100%"
-        focusedRowEnabled
-        focusedRowKey={selection.focusedRowKey}
-        selectedRowKeys={selection.selectedRowKeys}
-        onContentReady={treeListOnContentReady}
-        onKeyDown={treeListOnKeyDown}
-        onFocusedRowChanged={onFocusedRowChanged}
-        onSelectionChanged={onSelectionChanged}
-      >
-        <RemoteOperations filtering sorting grouping />
-        <Selection mode="single" />
-        <Scrolling mode="virtual" />
-        <Column dataField="Task_ID" />
-        <Column dataField="Task_Assigned_Employee_ID" caption="Employee" minWidth={120}>
-          <Lookup dataSource={lookupStore} valueExpr="ID" displayExpr="Name" />
-        </Column>
-        <Column dataField="Task_Subject" width={300} />
-        <Column dataField="Task_Start_Date" caption="Start Date" dataType="date" />
-        <Column dataField="Task_Status" caption="Status" />
-        <Column dataField="Task_Due_Date" caption="Due Date" dataType="date" />
-      </TreeList>
-    </DropDownBox>
+      contentRender={treeListRender}
+    />
   );
 }
