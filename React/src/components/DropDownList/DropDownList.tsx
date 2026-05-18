@@ -44,24 +44,24 @@ export default function DropDownList({
   const listFirstLoadCompletedRef = useRef(false);
 
   useEffect(() => {
-  function changedHandler(): void {
-    requestAnimationFrame(() => {
-      hasLoadedItemsRef.current = !!dataSource.items().length;
-      if (hasLoadedItemsRef.current && !selection.focusedRowKey) {
-        const items = dataSource.items();
-        dispatch({ type: 'SET_FOCUSED_KEY', key: items[0].key });
-      }
-    });
-  }
+    function changedHandler(): void {
+      requestAnimationFrame(() => {
+        hasLoadedItemsRef.current = !!dataSource.items().length;
+        if (hasLoadedItemsRef.current && !selection.focusedRowKey) {
+          const items = dataSource.items();
+          dispatch({ type: 'SET_FOCUSED_KEY', key: items[0].key });
+        }
+      });
+    }
 
-  dataSource.on('changed', changedHandler);
+    dataSource.on('changed', changedHandler);
 
-  changedHandler();
+    changedHandler();
 
-  return () => {
-    dataSource.off('changed', changedHandler);
-  };
-}, [dataSource, selection.focusedRowKey]);
+    return () => {
+      dataSource.off('changed', changedHandler);
+    };
+  }, [dataSource, selection.focusedRowKey]);
 
   const focusInput = useCallback((): void => {
     setTimeout(() => {
