@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import App from './App.tsx';
 
-test('renders learn react link', () => {
+test('renders DropDownBox with search and embedded TreeList', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const titleElement = screen.getByText(/DropDownBox with search and embedded TreeList/i);
+  expect(titleElement).toBeInTheDocument();
 });
