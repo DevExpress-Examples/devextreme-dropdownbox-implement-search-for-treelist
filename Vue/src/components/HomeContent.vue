@@ -26,7 +26,7 @@ onMounted(() => {
   (lookupStore.load() as Promise<Employee[]>)
     .then((items) => {
       displayExpr.value = (item: Task) =>
-        getDisplayExpr(item as Parameters<typeof getDisplayExpr>[0], items);
+        getDisplayExpr(item, items);
       return items;
     })
     .catch((error) => {
