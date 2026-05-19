@@ -1,7 +1,5 @@
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import type DxDropDownBox from 'devextreme/ui/drop_down_box';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore third-party store has no types
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 const BASE_URL = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';

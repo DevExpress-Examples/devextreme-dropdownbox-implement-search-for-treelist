@@ -3,18 +3,19 @@ import { onMounted, ref } from 'vue';
 import 'devextreme/dist/css/dx.light.css';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxNumberBox from 'devextreme-vue/number-box';
-import DataSource from 'devextreme/data/data_source';
+import type { DataSource } from 'devextreme-vue/common/data';
 import DropDownList from './DropDownList.vue';
 import {
   type Employee,
+  type Task,
   type SearchExprItem,
   createTasksDataSource,
   getDisplayExpr,
   getSearchExprItems,
   lookupStore,
-} from '../service';
+} from '@/service';
 
-const displayExpr = ref<((item: unknown) => string) | undefined>(undefined);
+const displayExpr = ref<((item: Task) => string) | undefined>(undefined);
 const searchExprValue = ref<string | string[]>('Employee');
 const searchTimeout = ref(1000);
 
@@ -22,13 +23,15 @@ const dataSource: DataSource = createTasksDataSource();
 const searchExprItems: SearchExprItem[] = getSearchExprItems();
 
 onMounted(() => {
-  (lookupStore.load() as Promise<Employee[]>).then((items) => {
-    displayExpr.value = (item: unknown) => getDisplayExpr(item as Parameters<typeof getDisplayExpr>[0], items);
-    return items;
-  }).catch((error: unknown) => {
-    // eslint-disable-next-line no-console
-    console.error('Failed to load lookup data:', error);
-  });
+  (lookupStore.load() as Promise<Employee[]>)
+    .then((items) => {
+      displayExpr.value = (item: Task) =>
+        getDisplayExpr(item as Parameters<typeof getDisplayExpr>[0], items);
+      return items;
+    })
+    .catch((error) => {
+      console.error('Failed to load lookup data:', error);
+    });
 });
 </script>
 
