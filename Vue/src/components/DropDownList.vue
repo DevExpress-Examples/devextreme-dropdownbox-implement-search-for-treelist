@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import type { DataSource } from 'devextreme-vue/common/data';
 import DxDropDownBox from 'devextreme-vue/drop-down-box';
 import type { DxDropDownBoxTypes } from 'devextreme-vue/drop-down-box';
@@ -29,7 +29,7 @@ const props = defineProps<{
   searchExprValue: string | string[];
 }>();
 
-const searchTimeoutValue = props.searchTimeout ?? 1000;
+const searchTimeoutValue = computed(() => props.searchTimeout ?? 1000);
 
 const treeListRef = ref<InstanceType<typeof DxTreeList> | null>(null);
 const dropDownBoxRef = ref<InstanceType<typeof DxDropDownBox> | null>(null);
@@ -88,7 +88,7 @@ function onInput(e: DxDropDownBoxTypes.InputEvent): void {
     if (text) {
       searchTimerId = setTimeout(() => {
         applySearchFilter(text, props.searchExprValue, props.dataSource);
-      }, searchTimeoutValue);
+      }, searchTimeoutValue.value);
     } else {
       props.dataSource.filter(null);
     }
