@@ -31,8 +31,8 @@ const props = defineProps<{
 
 const searchTimeoutValue = computed(() => props.searchTimeout ?? 1000);
 
-const treeListRef = ref<InstanceType<typeof DxTreeList> | null>(null);
-const dropDownBoxRef = ref<InstanceType<typeof DxDropDownBox> | null>(null);
+const treeListRef = ref<DxTreeList | null>(null);
+const dropDownBoxRef = ref<DxDropDownBox | null>(null);
 
 const value = ref<number | null>(props.selectedRowKey);
 const dropDownBoxOpened = ref(false);
