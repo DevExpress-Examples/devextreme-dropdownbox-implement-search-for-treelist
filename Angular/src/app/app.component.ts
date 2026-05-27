@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { DataSource } from 'devextreme-angular/common/data';
 import { Service, Employee, SearchExprItem } from './app.service';
+import { DxDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box';
+import { DxTreeListModule } from 'devextreme-angular/ui/tree-list';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import { DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
+import { DropDownListComponent } from './drop-down-list/drop-down-list.component';
 
 @Component({
   selector: 'app-root',
+  imports: [DxDropDownBoxModule, DxTreeListModule, DxSelectBoxModule, DxNumberBoxModule, DropDownListComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: false,
 })
 export class AppComponent implements OnInit {
   dataSource!: DataSource;

@@ -6,12 +6,16 @@ import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import type { DxDropDownBoxTypes } from 'devextreme-angular/ui/drop-down-box';
 import { DataSource } from 'devextreme-angular/common/data';
 import { Service, firstRowKey } from '../app.service';
+import { DxDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box';
+import { DxTreeListModule } from 'devextreme-angular/ui/tree-list';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import { DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
 
 @Component({
   selector: 'app-drop-down-list',
+  imports: [DxDropDownBoxModule, DxTreeListModule, DxSelectBoxModule, DxNumberBoxModule],
   templateUrl: './drop-down-list.component.html',
   styleUrls: ['./drop-down-list.component.scss'],
-  standalone: false,
 })
 export class DropDownListComponent implements OnInit, OnChanges {
   @Input() selectedRowKey!: number;
