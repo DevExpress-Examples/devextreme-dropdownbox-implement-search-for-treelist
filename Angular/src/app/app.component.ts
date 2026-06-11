@@ -38,7 +38,6 @@ export class AppComponent implements OnInit {
       this.displayExpr = (item: any): string => this.service.getDisplayExpr(item, items);
       return items;
     }).catch((error) => {
-      // eslint-disable-next-line no-console
       console.error('Failed to load lookup data:', error);
     });
   }

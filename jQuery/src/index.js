@@ -14,7 +14,6 @@ lookupDataSource.load().then((items) => {
   $('#treeBox').dxDropDownBox('instance')?.repaint();
   return items;
 }).catch((error) => {
-  // eslint-disable-next-line no-console
   console.error('Failed to load lookup data:', error);
 });
 
