@@ -30,7 +30,6 @@ function App(): JSX.Element {
       setDisplayExpr(() => (item: Task) => getDisplayExpr(item, items));
       return items;
     }).catch((error) => {
-      // eslint-disable-next-line no-console
       console.error('Failed to load lookup data:', error);
     });
   }, []);
