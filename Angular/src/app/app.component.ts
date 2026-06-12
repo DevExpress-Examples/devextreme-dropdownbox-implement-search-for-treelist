@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DataSource } from 'devextreme-angular/common/data';
 import { Service, Employee, SearchExprItem } from './app.service';
 import { DxDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box';
@@ -11,6 +11,7 @@ import { DropDownListComponent } from './drop-down-list/drop-down-list.component
   selector: 'app-root',
   imports: [DxDropDownBoxModule, DxTreeListModule, DxSelectBoxModule, DxNumberBoxModule, DropDownListComponent],
   templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {

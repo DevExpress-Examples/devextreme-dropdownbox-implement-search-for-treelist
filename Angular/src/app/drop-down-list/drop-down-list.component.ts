@@ -1,5 +1,6 @@
 import {
   Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, ChangeDetectorRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { DxDropDownBoxComponent, DxTreeListComponent } from 'devextreme-angular';
 import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
@@ -15,6 +16,7 @@ import { DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
   selector: 'app-drop-down-list',
   imports: [DxDropDownBoxModule, DxTreeListModule, DxSelectBoxModule, DxNumberBoxModule],
   templateUrl: './drop-down-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./drop-down-list.component.scss'],
 })
 export class DropDownListComponent implements OnInit, OnChanges {
