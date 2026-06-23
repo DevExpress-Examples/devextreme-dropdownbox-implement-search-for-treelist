@@ -5,23 +5,23 @@
 [![](https://img.shields.io/badge/💬_Leave_Feedback-feecdd?style=flat-square)](#does-this-example-address-your-development-requirementsobjectives)
 <!-- default badges end -->
 
-# DevExtreme DropDownBox - Search in an Embedded TreeList
+# DevExtreme DropDownBox - Search Within an Embedded TreeList
 
-This example implements a search that filters data in a [TreeList](https://js.devexpress.com/Documentation/Guide/UI_Components/TreeList/Getting_Started_with_TreeList/) embedded in a [DropDownBox](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Getting_Started_with_DropDownBox/) component.
+This example implements a search that filters data in a [TreeList](https://js.devexpress.com/Documentation/Guide/UI_Components/TreeList/Getting_Started_with_TreeList/) placed into a [DropDownBox](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Getting_Started_with_DropDownBox/) component.
 
 ![DropDownBox filtering](./images/dx-dropdownbox-implement-search-for-treelist.png)
 
 ## Implementation Details
 
-The example uses four [DropDownBox](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/) event handlers to coordinate search behavior between the input field and the embedded TreeList.
+The example handles the following [DropDownBox](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/) events to synchronize search behavior between the input field and the embedded TreeList:
 
-1. The [onInput](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onInput) handler fires when the user types in the DropDownBox. It opens the dropdown if it is not already open, and filters the TreeList by applying a filter to the data source based on the typed text.
+1. The [onInput](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onInput) event fires when the user types in the DropDownBox. The event handler opens the dropdown (if it is not already open) and applies a filter to the data source based on the entered text.
 
-2. The [onOpened](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onOpened) handler fires when the dropdown opens. It registers a listener on the TreeList to move focus to it once the TreeList is ready for keyboard navigation.
+2. The [onOpened](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onOpened) event fires when the dropdown opens. The event handler registers a listener on the TreeList to move focus to the component once the TreeList is ready for keyboard navigation.
 
-3. The [onClosed](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onClosed) handler fires when the dropdown closes. It resets the search state: if the typed text does not match a valid selection, the handler either selects the first available row or clears the DropDownBox value.
+3. The [onClosed](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onClosed) event fires when the dropdown closes. The event handler resets the search state: if the entered text does not match a valid selection, the handler either selects the first available row or clears the DropDownBox value.
 
-4. The [onKeyDown](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onKeyDown) handler fires when the user presses a key. It moves focus to the TreeList when the user presses the Arrow Down key.
+4. The [onKeyDown](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onKeyDown) event fires when the user presses a key. The event handler moves focus to the TreeList when the user presses the Arrow Down key.
 
 ## Files to Review
 
