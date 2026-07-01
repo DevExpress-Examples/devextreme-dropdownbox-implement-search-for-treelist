@@ -5,13 +5,11 @@
 [![](https://img.shields.io/badge/💬_Leave_Feedback-feecdd?style=flat-square)](#does-this-example-address-your-development-requirementsobjectives)
 <!-- default badges end -->
 
-# DropDownBox for DevExtreme - How to implement search for TreeList
+# DevExtreme DropDownBox - Search Within an Embedded TreeList
 
-This example illustrates how to implement search for TreeList.
+This repository contains code referenced in the following DevExtreme help topic: [DropDownBox - How To Search by Lookup Column (TreeList)](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Search_in_Embedded_Components/#Search_by_Lookup_Column_TreeList). 
 
-The search feature is implemented in the DropDownBox component's [onInput](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onInput) event handler. This modifies the TreeList's searchPanel [text](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/searchPanel/#text) property. The TreeList's [onSelectionChanged](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onSelectionChanged) event handler updates the DropDownBox's value. The keyboard navigation using the arrow down key is implemented in the DropDownBox's [onKeyDown](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onKeyDown) event handler.
-
-<div align="center"><img alt="DropDownBox for DevExtreme - How to implement search for TreeList" src="images/dx-dropdownbox-implement-search-for-treelist.png" /></div>
+![DropDownBox filtering](./images/dx-dropdownbox-implement-search-for-treelist.png)
 
 ## Files to Review
 
@@ -21,14 +19,26 @@ The search feature is implemented in the DropDownBox component's [onInput](https
 - **jQuery**
     - [index.html](jQuery/src/index.html)
     - [index.js](jQuery/src/index.js)
-- **ASP.NET**    
+    - [helpers.js](jQuery/src/helpers.js)
+- **React**
+    - [DropDownList.tsx](React/src/components/DropDownList/DropDownList.tsx)
+    - [service.ts](React/src/service.ts)
+- **Vue**
+    - [DropDownList.vue](Vue/src/components/DropDownList.vue)
+    - [service.ts](Vue/src/service.ts)
+- **ASP.NET Core**
     - [Index.cshtml](ASP.NET%20Core/Views/Home/Index.cshtml)
 
 ## Documentation
 
 - [Getting Started with DropDownBox](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Getting_Started_with_DropDownBox/)
+- [DropDownBox - Synchronize with the Embedded Element](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Synchronize_with_the_Embedded_Element/)
+- [DropDownBox - Search in Embedded Components](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Search_in_Embedded_Components/)
 
-- [DropDownBox - API Reference](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/)
+## More Examples
+
+[DevExtreme DropDownBox - Search Within an Embedded DataGrid](https://github.com/DevExpress-Examples/devextreme-dropdownbox-search-in-datagrid)
+
 <!-- feedback -->
 ## Does This Example Address Your Development Requirements/Objectives?
 
