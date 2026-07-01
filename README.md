@@ -7,21 +7,9 @@
 
 # DevExtreme DropDownBox - Search Within an Embedded TreeList
 
-This example implements a search that filters data in a [TreeList](https://js.devexpress.com/Documentation/Guide/UI_Components/TreeList/Getting_Started_with_TreeList/) placed into a [DropDownBox](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Getting_Started_with_DropDownBox/) component.
+This repository contains code referenced in the following DevExtreme help topic: [DropDownBox - How To Search by Lookup Column (TreeList)](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Search_in_Embedded_Components/#Search_by_Lookup_Column_TreeList). 
 
 ![DropDownBox filtering](./images/dx-dropdownbox-implement-search-for-treelist.png)
-
-## Implementation Details
-
-The example handles the following [DropDownBox](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/) events to synchronize search behavior between the input field and the embedded TreeList:
-
-1. The [onInput](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onInput) event fires when the user types in the DropDownBox. The event handler opens the dropdown (if it is not already open) and applies a filter to the data source based on the entered text.
-
-2. The [onOpened](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onOpened) event fires when the dropdown opens. The event handler registers a listener on the TreeList to move focus to the component once the TreeList is ready for keyboard navigation.
-
-3. The [onClosed](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onClosed) event fires when the dropdown closes. The event handler resets the search state: if the entered text does not match a valid selection, the handler either selects the first available row or clears the DropDownBox value.
-
-4. The [onKeyDown](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onKeyDown) event fires when the user presses a key. The event handler moves focus to the TreeList when the user presses the Arrow Down key.
 
 ## Files to Review
 
@@ -45,11 +33,11 @@ The example handles the following [DropDownBox](https://js.devexpress.com/Docume
 
 - [Getting Started with DropDownBox](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Getting_Started_with_DropDownBox/)
 - [DropDownBox - Synchronize with the Embedded Element](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Synchronize_with_the_Embedded_Element/)
-- [DropDownBox API - onInput](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onInput)
-- [DropDownBox API - onOpened](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onOpened)
-- [DropDownBox API - onClosed](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onClosed)
-- [DropDownBox API - onKeyDown](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDropDownBox/Configuration/#onKeyDown)
-- [TreeList API Reference](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/)
+- [DropDownBox - Search in Embedded Components](https://js.devexpress.com/Documentation/Guide/UI_Components/DropDownBox/Search_in_Embedded_Components/)
+
+## More Examples
+
+[DevExtreme DropDownBox - Search Within an Embedded DataGrid](https://github.com/DevExpress-Examples/devextreme-dropdownbox-search-in-datagrid)
 
 <!-- feedback -->
 ## Does This Example Address Your Development Requirements/Objectives?
